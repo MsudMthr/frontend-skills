@@ -21,6 +21,17 @@ frontend-skills/
 │       ├── COMPOSABLE.md
 │       ├── ...
 │
+├── review/
+│   ├── SKILL.md
+│   └── references/
+│       └── RISK.md
+│
+├── ship/
+│   └── SKILL.md
+│
+├── vendor/
+│   └── ponytail/   (git submodule — https://github.com/DietrichGebert/ponytail)
+│
 ├── README.md
 └── LICENSE
 ```
@@ -34,6 +45,34 @@ Each top-level directory is an independently installable Skill.
 Frontend development conventions covering architecture, code style, naming, components, state management, styling, localization, and other project-level development practices.
 
 The Skill uses `SKILL.md` as its entry point and `references/` for detailed rules.
+
+### `review`
+
+Simplicity/YAGNI-focused code review and planning, composed from two sources:
+[`vendor/ponytail`](https://github.com/DietrichGebert/ponytail) (general over-engineering/YAGNI
+rules) and this repo's own `develop` skill (project-specific conventions). See `review/SKILL.md`
+and `review/references/RISK.md` for the operational low/medium/high risk criteria every finding is
+scored against.
+
+### `ship`
+
+Automates the implement → review → fix loop for a task, unit by unit: implements per `develop`'s
+conventions, reviews via `/review`, auto-applies low-risk fixes, and always stops to confirm before
+applying a medium/high-risk fix. See `ship/SKILL.md`.
+
+## Submodules
+
+This repo uses a git submodule (`vendor/ponytail`) for the `review` skill. Clone with:
+
+```bash
+git clone --recurse-submodules https://github.com/eghamat24/frontend-skills
+```
+
+If you already cloned without that flag, run:
+
+```bash
+git submodule update --init --recursive
+```
 
 ## Installation
 
