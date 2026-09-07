@@ -18,13 +18,17 @@ This skill does not define its own rules. It orchestrates two existing rule sets
 fresh at the time `/review` or `/plan` runs, so updates to either source are picked up
 automatically without ever being copied here:
 
-- **`vendor/ponytail`** (git submodule — general YAGNI ladder, over-engineering tags, marker-comment
-  convention). Canonical files: `vendor/ponytail/AGENTS.md` and `vendor/ponytail/skills/ponytail/SKILL.md`
-  for the ladder and rules, `vendor/ponytail/skills/ponytail-review/SKILL.md` for the diff-scoped tag
-  taxonomy (`delete`/`stdlib`/`native`/`yagni`/`shrink`), `vendor/ponytail/skills/ponytail-audit/SKILL.md`
-  for the repo-wide variant of the same taxonomy, and `vendor/ponytail/skills/ponytail-debt/SKILL.md`
+- **`../vendor/ponytail`** (git submodule — general YAGNI ladder, over-engineering tags,
+  marker-comment convention). Canonical files: `../vendor/ponytail/AGENTS.md` and
+  `../vendor/ponytail/skills/ponytail/SKILL.md` for the ladder and rules,
+  `../vendor/ponytail/skills/ponytail-review/SKILL.md` for the diff-scoped tag taxonomy
+  (`delete`/`stdlib`/`native`/`yagni`/`shrink`), `../vendor/ponytail/skills/ponytail-audit/SKILL.md`
+  for the repo-wide variant of the same taxonomy, and `../vendor/ponytail/skills/ponytail-debt/SKILL.md`
   for the `ponytail:` marker-comment convention (a deliberate, already-justified simplification —
-  don't re-flag it as a new finding).
+  don't re-flag it as a new finding). Written `../vendor/...` — sibling-relative to this skill's own
+  directory, the same convention `../develop` already uses — rather than a bare `vendor/...`, because
+  this skill is installed as a Junction under a global skills directory (see the repo's
+  `install.ps1`), where a bare or cwd-relative path wouldn't reliably resolve.
 - **`../develop`** (this repo's own skill — Vue3/JS/CSS conventions, architecture layering, naming).
   Canonical entry point: `../develop/SKILL.md`, which itself decides which `../develop/references/*.md`
   files apply to a given file.
@@ -53,8 +57,8 @@ report. Never edits anything until you say so.
 3. **Skip already-tracked debt.** If a touched line already carries a `ponytail:` marker comment
    (see `ponytail-debt`'s convention), don't raise it as a new finding — it's a deliberate,
    already-justified simplification with its own noted ceiling/upgrade path.
-4. **Apply ponytail's lens.** Read `vendor/ponytail/AGENTS.md`, `vendor/ponytail/skills/ponytail/SKILL.md`,
-   and `vendor/ponytail/skills/ponytail-review/SKILL.md` (or `ponytail-audit/SKILL.md` instead, if the
+4. **Apply ponytail's lens.** Read `../vendor/ponytail/AGENTS.md`, `../vendor/ponytail/skills/ponytail/SKILL.md`,
+   and `../vendor/ponytail/skills/ponytail-review/SKILL.md` (or `ponytail-audit/SKILL.md` instead, if the
    resolved target in step 1 is repo-wide rather than a diff). Apply the YAGNI ladder and tag
    taxonomy to the changed/touched code: unnecessary abstractions, premature generalization, unused
    flexibility, hand-rolled stdlib, dependencies duplicating a native feature, anything failing the
@@ -86,7 +90,7 @@ Pseudocode-level feature planning under the same two rulesets — no real implem
 2. Read this project's `CLAUDE.md` (or whatever override doc `../develop/SKILL.md`'s own Workflow
    step 1 names, e.g. `PROJECT.md`) for the project's actual stack and any deliberate deviations.
 3. Produce a plan down to pseudocode level — file/function structure, not real code — applying:
-   - Ponytail's ladder (`vendor/ponytail/AGENTS.md` / `skills/ponytail/SKILL.md`): every abstraction
+   - Ponytail's ladder (`../vendor/ponytail/AGENTS.md` / `../vendor/ponytail/skills/ponytail/SKILL.md`): every abstraction
      in the plan must be justified by a real, current need surfaced in the task description, never
      a speculative future one.
    - `develop`'s conventions (via `../develop/SKILL.md`'s own scoping logic, same as step 5 above):
@@ -95,9 +99,10 @@ Pseudocode-level feature planning under the same two rulesets — no real implem
 
 ## Keeping ponytail current
 
-`vendor/ponytail` is a git submodule pinned to a specific commit. Since this skill reads it at
-runtime rather than copying its rules, update it independently whenever you want the latest ladder
-or tag taxonomy:
+`vendor/ponytail` (this repository's `../vendor/ponytail` from this skill's own perspective) is a
+git submodule pinned to a specific commit. Since this skill reads it at runtime rather than copying
+its rules, update it independently whenever you want the latest ladder or tag taxonomy — run this
+from the repository root, not from inside the installed skill directory:
 
 ```bash
 git submodule update --remote vendor/ponytail
